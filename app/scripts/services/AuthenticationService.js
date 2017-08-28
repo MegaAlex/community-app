@@ -138,15 +138,17 @@
                     .error(onOTPValidateError);
             };
 
-            scope.$on("OnUserPreLogout", function (event) {
-                var userDate = localStorageService.getFromLocalStorage("userData");
+            if(scope) {
+                scope.$on("OnUserPreLogout", function (event) {
+                    var userDate = localStorageService.getFromLocalStorage("userData");
 
-                // Remove user data and two-factor access token if present
-                localStorageService.removeFromLocalStorage("userData");
-                removeTwoFactorTokenFromStorage(userDate.username);
+                    // Remove user data and two-factor access token if present
+                    localStorageService.removeFromLocalStorage("userData");
+                    removeTwoFactorTokenFromStorage(userDate.username);
 
-                httpService.post(apiVer + "/twofactor/invalidate", '{"token": "' + twoFactorAccessToken + '"}');
-            });
+                    httpService.post(apiVer + "/twofactor/invalidate", '{"token": "' + twoFactorAccessToken + '"}');
+                });
+            }
         }
     });
     mifosX.ng.services.service('AuthenticationService', ['$rootScope', 'HttpService', 'SECURITY', 'localStorageService','$timeout','webStorage', mifosX.services.AuthenticationService]).run(function ($log) {
